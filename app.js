@@ -7,24 +7,42 @@ const SEARCH_API =
 const main = document.getElementById("main");
 const form = document.getElementById("form");
 const search = document.getElementById("search");
+const homeBtns = document.querySelectorAll(".home");
 const prevBtns = document.querySelectorAll(".prev");
 const nextBtns = document.querySelectorAll(".next");
 
 getMovies(API_URL);
 
 let index = 1;
+let searched = "";
+
+homeBtns.forEach((btn) => {
+  btn.addEventListener("click", () => {
+    index = 1;
+    searched = "";
+    getMovies(`${API_URL}&page=${index}`);
+  });
+});
 
 nextBtns.forEach((btn) => {
   btn.addEventListener("click", () => {
     index++;
-    getMovies(`${API_URL}&page=${index}`);
+    if (searched) {
+      getMovies(SEARCH_API + `"${searched}"&page=${index}`);
+    } else {
+      getMovies(`${API_URL}&page=${index}`);
+    }
   });
 });
 
 prevBtns.forEach((btn) => {
   btn.addEventListener("click", () => {
     index--;
-    getMovies(`${API_URL}&page=${index}`);
+    if (searched) {
+      getMovies(SEARCH_API + `"${searched}"&page=${index}`);
+    } else {
+      getMovies(`${API_URL}&page=${index}`);
+    }
   });
 });
 
@@ -32,7 +50,6 @@ async function getMovies(url) {
   const res = await fetch(url);
   const data = await res.json();
   const { results } = await data;
-
   showMovies(results);
 }
 
@@ -45,15 +62,15 @@ function showMovies(movies) {
     movieBox.classList = "movie";
 
     movieBox.innerHTML = `
-    <img src="${IMG_PATH + poster_path}" alt="${title}" />
-    <div class="movie-info">
-    <h3>${title}</h3>
-    <span class="${getRating(vote_average)}">${vote_average}</span>
-    </div>
-    <div class="overview">
-    <h3>Overview</h3>
-    <p>${overview}</p>
-    </div>
+      <img src="${IMG_PATH + poster_path}" alt="${title}" />
+      <div class="movie-info">
+      <h3>${title}</h3>
+      <span class="${getRating(vote_average)}">${vote_average}</span>
+      </div>
+      <div class="overview">
+      <h3>Overview</h3>
+      <p>${overview}</p>
+      </div>
     `;
 
     main.appendChild(movieBox);
@@ -74,6 +91,7 @@ form.addEventListener("submit", (e) => {
   e.preventDefault();
 
   const searchTerm = search.value;
+  searched = searchTerm;
 
   if (searchTerm) {
     getMovies(SEARCH_API + `"${searchTerm}"`);
