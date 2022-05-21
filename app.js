@@ -7,8 +7,26 @@ const SEARCH_API =
 const main = document.getElementById("main");
 const form = document.getElementById("form");
 const search = document.getElementById("search");
+const prevBtns = document.querySelectorAll(".prev");
+const nextBtns = document.querySelectorAll(".next");
 
 getMovies(API_URL);
+
+let index = 1;
+
+nextBtns.forEach((btn) => {
+  btn.addEventListener("click", () => {
+    index++;
+    getMovies(`${API_URL}&page=${index}`);
+  });
+});
+
+prevBtns.forEach((btn) => {
+  btn.addEventListener("click", () => {
+    index--;
+    getMovies(`${API_URL}&page=${index}`);
+  });
+});
 
 async function getMovies(url) {
   const res = await fetch(url);

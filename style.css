@@ -105,3 +105,26 @@ header {
   overflow-y: auto;
   transition: transform 0.3s ease-in;
 }
+
+.button-group {
+  display: flex;
+  justify-content: space-between;
+  width: 200px;
+  margin: 10px auto;
+}
+
+.btn {
+  border: none;
+  border-radius: 50px;
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: bold;
+  padding: 0.5rem 1rem;
+  color: var(--primary-color);
+  cursor: pointer;
+}
+
+.btn:hover {
+  background-color: var(--primary-color);
+  color: #fff;
+}
